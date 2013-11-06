@@ -19,10 +19,10 @@ RF24 radio(8,9);
 RF24Network network(radio);
 
 // Address of our node
-const uint16_t this_node = 0;
+const uint16_t this_node = 2;
 
 // Address of the other node
-const uint16_t other_node = 1;
+const uint16_t other_node = 0;
 
 // How often to send 'hello world to the other unit
 const unsigned long interval = 2000; //ms
@@ -78,13 +78,13 @@ void transmitting()
 
     //toggleLED();
     printf("Sending...\r\n");
-    const char* hello = "Hello, world!";
+    const char* hello = "Received from 3" ;
     RF24NetworkHeader header(/*to node*/ other_node);
     bool ok = network.write(header,hello,strlen(hello));
     if (ok)
     {
       printf("\tok.\r\n");
-      Serial.print("Send: ");
+      Serial.println("Send from 3 ");
     }
     else
     {
