@@ -40,7 +40,7 @@ uint16_t to;
 uint16_t tonode;
 
 // for example
-char info;
+String info;
 
 
 
@@ -81,9 +81,9 @@ void setup(void)
 }
 
 void loop (void)
-{ 
-      tonode=1;
-      network.update();
+{
+    tonode=2;
+    network.update();
     //is there data for us
     while (network.available())
     {
@@ -112,8 +112,13 @@ void loop (void)
         //example code
         Serial.flush() ;//flush all previous received and transmitted data
         while(Serial.available()) {
-            info = Serial.read();
-            senddata(tonode,info);// here the node send his information to the base
+            char temprecieved = Serial.read();
+            info+=temprecieved;
+            if(temprecieved =='\n')
+            {
+                senddata(tonode,info);// here the node send his information to tonode
+                info="";
+            }
         }
     }
     //if you are the base send node addresses
@@ -134,7 +139,7 @@ void loop (void)
                 to = 00;
             }
         }
-
+        
         send_N(to);
     }
     
@@ -142,7 +147,7 @@ void loop (void)
 }
 
 //this function sends the actual info
-void senddata(/*node address*/uint16_t to, /*data to transmit. you can choose other types too*/ char info )
+void senddata(/*node address*/uint16_t to, /*data to transmit. you can choose other types too*/ String info )
 {
     RF24NetworkHeader header(to, 'A');
     
@@ -160,8 +165,8 @@ void senddata(/*node address*/uint16_t to, /*data to transmit. you can choose ot
 // if data arrive this function will start. Change if needed
 void handle_A(RF24NetworkHeader& header)
 {
-    char info;
-    network.read(header,&info,sizeof(char));
+    String info;
+    network.read(header,&info,sizeof(String));
     Serial.println(info);
 }
 
