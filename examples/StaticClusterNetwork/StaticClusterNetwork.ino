@@ -5,6 +5,10 @@
  modify it under the terms of the GNU General Public License
  version 2 as published by the Free Software Foundation.
  */
+ 
+ /*   edited by Kevin Heyvaert <heyvaertkevin@gmail.com>
+      Example for sending text to node with static given addresses
+ */ 
 
 #include <RF24Network.h>
 #include <RF24.h>

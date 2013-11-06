@@ -7,7 +7,7 @@
  */
  
  /* 
-     editet by Joris Huybrechts <jorisadri@hotmail.com>
+     edited by Joris Huybrechts <jorisadri@hotmail.com>
      
      Example for sending data to node you defined. 
       
@@ -29,7 +29,7 @@
 #endif
 
 // nRF24L01(+) radio using the Getting Started board
-RF24 radio(8,9);
+RF24 radio(8,7);
 RF24Network network(radio);
 
 // Our node address
