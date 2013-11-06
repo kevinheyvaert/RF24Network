@@ -5,12 +5,12 @@
  modify it under the terms of the GNU General Public License
  version 2 as published by the Free Software Foundation.
  */
+
+/*
+ edited by Joris Huybrechts <jorisadri@hotmail.com>
  
- /* 
-     edited by Joris Huybrechts <jorisadri@hotmail.com>
-     
-     Example for sending data to node you defined. 
-      
+ Example for sending data to node you defined.
+ 
  */
 
 
@@ -37,6 +37,7 @@ uint16_t this_node;
 
 // the adres for receiving node
 uint16_t to;
+uint16_t tonode;
 
 // for example
 char info;
@@ -80,9 +81,9 @@ void setup(void)
 }
 
 void loop (void)
-{
-    
-    network.update();
+{ 
+      tonode=1;
+      network.update();
     //is there data for us
     while (network.available())
     {
@@ -112,12 +113,28 @@ void loop (void)
         Serial.flush() ;//flush all previous received and transmitted data
         while(Serial.available()) {
             info = Serial.read();
-            senddata(0,info);// here the node send his information to the base
+            senddata(tonode,info);// here the node send his information to the base
         }
     }
     //if you are the base send node addresses
     else
     {
+        if ( num_active_nodes )
+        {
+            // Send to the next active node
+            to = active_nodes[next_ping_node_index++];
+            
+            // Have we rolled over?
+            if ( next_ping_node_index > num_active_nodes )
+            {
+                // Next time start at the beginning
+                next_ping_node_index = 0;
+                
+                // This time, send to node 00.
+                to = 00;
+            }
+        }
+
         send_N(to);
     }
     
