@@ -18,6 +18,7 @@
 #include <RF24Network.h>
 #include <RF24.h>
 #include <SPI.h>
+#include <Irsensor.h>
 #include "nodeconfig.h"
 #include "printf.h"
 
@@ -31,6 +32,7 @@
 // nRF24L01(+) radio using the Getting Started board
 RF24 radio(8,7);
 RF24Network network(radio);
+Irsensor sensor(A0); // port for IrSensor
 
 // Our node address
 uint16_t this_node;
@@ -40,7 +42,7 @@ uint16_t to;
 uint16_t tonode;
 
 // for example
-String info;
+int info;
 
 
 
@@ -109,18 +111,15 @@ void loop (void)
     // if youre not the base(0) then do what this node neet to do and send data.
     if ( this_node > 00 || to == 00 )
     {
-        //example code
-        Serial.flush() ;//flush all previous received and transmitted data
-        while(Serial.available()) {
-            char temprecieved = Serial.read();
-            info+=temprecieved;
-            if(temprecieved =='\n')
-            {
-                senddata(tonode,info);// here the node send his information to tonode
-                info="";
-            }
-        }
+                  
+      info=sensor.filtered();
+      Serial.println(info);
+      senddata(tonode,info);// here the node send his information to tonode
+            
     }
+        
+         
+    
     //if you are the base send node addresses
     else
     {
@@ -138,20 +137,21 @@ void loop (void)
                 // This time, send to node 00.
                 to = 00;
             }
+            send_N(to);
         }
         
-        send_N(to);
+        
     }
     
     
 }
 
 //this function sends the actual info
-void senddata(/*node address*/uint16_t to, /*data to transmit. you can choose other types too*/ String info )
+void senddata(/*node address*/uint16_t to, /*data to transmit. you can choose other types too*/ int info )
 {
     RF24NetworkHeader header(to, 'A');
     
-    boolean issend= network.write(header,&info,sizeof(info));
+    boolean issend= network.write(header,&info,sizeof(int));
     
     if(issend == true)
     {
@@ -165,9 +165,9 @@ void senddata(/*node address*/uint16_t to, /*data to transmit. you can choose ot
 // if data arrive this function will start. Change if needed
 void handle_A(RF24NetworkHeader& header)
 {
-    String info;
-    network.read(header,&info,sizeof(String));
-    Serial.println(info);
+    int Info;
+    network.read(header,&Info,sizeof(int));
+    Serial.println(Info);
 }
 
 
