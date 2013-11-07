@@ -30,7 +30,7 @@ uint8_t nodeconfig_read(void)
   if ( eeprom_read_byte(address_at_eeprom_location) == valid_eeprom_flag )
   {
     // Read the address from EEPROM
-    result = node_address_set[ eeprom_read_byte(address_at_eeprom_location+1) ];
+    result =node_address_set[ eeprom_read_byte(address_at_eeprom_location+1) ];
     printf_P(PSTR("ADDRESS: %u\n\r"),result);
   }
   else

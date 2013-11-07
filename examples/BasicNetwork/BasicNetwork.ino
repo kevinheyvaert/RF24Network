@@ -30,7 +30,7 @@
 #endif
 
 // nRF24L01(+) radio using the Getting Started board
-RF24 radio(8,7);
+RF24 radio(8,9);
 RF24Network network(radio);
 Irsensor sensor(A0); // port for IrSensor
 
@@ -71,7 +71,7 @@ void setup(void)
     // Pull node address out of eeprom
     
     // Which node are we?
-    this_node = nodeconfig_read();
+    this_node = nodeconfig_read();;
     
     //
     // Bring up the RF network
@@ -109,7 +109,7 @@ void loop (void)
     }
     
     // if youre not the base(0) then do what this node neet to do and send data.
-    if ( this_node > 00 || to == 00 )
+    if ( this_node > 0 || tonode == 00 )
     {
                   
       info=sensor.filtered();
@@ -123,11 +123,12 @@ void loop (void)
     //if you are the base send node addresses
     else
     {
-        if ( num_active_nodes )
-        {
+      
+       // if ( num_active_nodes )
+        //{
             // Send to the next active node
             to = active_nodes[next_ping_node_index++];
-            
+           // Serial.println("nope");
             // Have we rolled over?
             if ( next_ping_node_index > num_active_nodes )
             {
@@ -138,7 +139,7 @@ void loop (void)
                 to = 00;
             }
             send_N(to);
-        }
+        //}
         
         
     }
