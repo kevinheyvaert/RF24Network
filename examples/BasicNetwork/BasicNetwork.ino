@@ -84,7 +84,7 @@ void setup(void)
 
 void loop (void)
 {
-    tonode=1;
+    tonode=02;
     network.update();
     //is there data for us
     while (network.available())
