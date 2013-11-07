@@ -30,7 +30,7 @@
 #endif
 
 // nRF24L01(+) radio using the Getting Started board
-RF24 radio(8,9);
+RF24 radio(8,7);
 RF24Network network(radio);
 Irsensor sensor(A0); // port for IrSensor
 
@@ -84,7 +84,7 @@ void setup(void)
 
 void loop (void)
 {
-    tonode=2;
+    tonode=1;
     network.update();
     //is there data for us
     while (network.available())
