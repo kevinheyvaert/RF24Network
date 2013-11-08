@@ -84,6 +84,7 @@ void setup(void)
 
 void loop (void)
 {
+    //octaal number of the address
     tonode=02;
     network.update();
     //is there data for us
@@ -96,7 +97,8 @@ void loop (void)
         //Send to correct handler
         switch (header.type)
         {
-            case 'A':
+         // here you can make more handlers for different datatypes
+            case 'A': 
                 handle_A(header);
                 break;
             case 'N':
